@@ -1,1 +1,1 @@
-export * from './lib/hydrograph.js';
+export * from './lib/hydrograph';
