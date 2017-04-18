@@ -1,5 +1,7 @@
 import { ChartDefault } from './defaults';
 
+console.log(ChartDefault);
+
 export default function hydrograph(){
 
   function chart() {
