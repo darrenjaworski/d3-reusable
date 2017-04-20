@@ -4,14 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rollup -c",
-    "gh-pages": "rollup --config rollup.config.gh.js"
+    "prebuild": "rm -rf dist",
+    "build": "webpack --config webpack.config.gh.js -p",
+    "dev": "webpack --config webpack.config.gh.js --watch"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "rollup": "^0.41.6",
-    "rollup-plugin-babel": "^2.7.1"
+    "webpack": "^2.4.1"
   }
 }
