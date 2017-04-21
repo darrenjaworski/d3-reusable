@@ -1,11 +1,11 @@
 import { ChartDefault } from './defaults';
 
-console.log(ChartDefault);
-
 export default function hydrograph(){
 
-  function chart() {
-
+  function chart(selection) {
+    selection.each(function(data) {
+      console.log(data)
+    })
   }
 
   chart.margin = function(_) {
