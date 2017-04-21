@@ -1,9 +1,15 @@
 import { ChartDefault } from './defaults';
 
-export default function hydrograph(){
+export function hydrograph(){
 
-  function chart() {
+  var margin = ChartDefault.margin;
+  var width = ChartDefault.width;
+  var height = ChartDefault.height;
 
+  function chart(selection) {
+    selection.each(function(data) {
+      console.log(data)
+    });
   }
 
   chart.margin = function(_) {
@@ -21,18 +27,6 @@ export default function hydrograph(){
   chart.height = function(_) {
     if (!arguments.length) return height;
     height = _;
-    return chart;
-  };
-
-  chart.x = function(_) {
-    if (!arguments.length) return xValue;
-    xValue = _;
-    return chart;
-  };
-
-  chart.y = function(_) {
-    if (!arguments.length) return yValue;
-    yValue = _;
     return chart;
   };
 

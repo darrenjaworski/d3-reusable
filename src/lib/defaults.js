@@ -5,6 +5,6 @@ export var ChartDefault = {
     bottom: 20,
     left: 20
   },
-  width: 760,
-  height: 120
+  width: 1000,
+  height: 500
 };
