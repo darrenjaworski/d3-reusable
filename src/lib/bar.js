@@ -12,18 +12,36 @@ export function bar(){
       var maxValue = d3.max(data);
       var widthScale = width / maxValue;
 
-      d3.select(this).append('svg')
+      var t = d3.transition().duration(750);
+
+      var svg = d3.select(this).append('svg')
         .attr('height', height)
-        .attr('width', width)
-        .selectAll('rect')
-        .data(data)
-          .enter()
-        .append('rect')
+        .attr('width', width);
+
+      var bar = svg.selectAll('rect')
+        .data(data);
+
+      bar.exit()
+        .attr('class', 'exit')
+        .transition(t)
+        .attr('width', function (d) { return d * widthScale})
+        .style('fill-opacity', 1e-6)
+        .remove();
+
+      bar.attr('class', 'update')
+        .attr('width', 0)
+        .style('fill-opacity', 1)
+        .transition(t)
+        .attr('x', 0)
+
+      bar.enter().append('rect')
+        .attr('class', 'enter')
         .attr('y', function (d, i) { return i * barSpacing })
         .attr('height', barHeight)
         .attr('x', 0)
         .attr('width', function (d) { return d * widthScale})
         .style('fill', fillColor);
+
     });
   }
 
