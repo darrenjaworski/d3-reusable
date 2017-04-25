@@ -5,19 +5,50 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <style>
+  .bar rect {
+    fill: steelblue;
+  }
+  .bar text {
+    fill: #fff;
+    font: 10px sans-serif;
+  }
+  </style>
 </head>
 <body>
+  <div id="histogram"></div>
+  <br />
+  <div id="weatherHistory"></div>
+  <br />
+  <div id="runningHistory"></div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.8.0/d3.min.js"></script>
   <script src="chart.min.js"></script>
 
   <script>
-  var chart = d3re.hydrograph();
+  var milesRun = [2, 5, 4, 1, 2, 6, 5];
+	var highTemperatures = [77, 71, 82, 87, 84, 78, 80, 84, 86, 72, 71, 68, 75, 73, 80, 85, 86, 80];
 
-  d3.csv('gh-pages.csv', function(data){
-    d3.select('#example')
-      .datum(data)
-      .call(chart);
+  var runningChart = d3re.bar().data(milesRun).barPadding(2);
+  d3.select('#runningHistory')
+    .call(runningChart);
+
+  var weatherChart = d3re.bar().data(highTemperatures).fillColor('coral');
+  d3.select('#weatherHistory')
+    .call(weatherChart);
+
+  d3.csv('gh-pages-1.csv', type, function(error, data){
+    if (error) throw error;
+    var histogram = d3re.histogram().data(data);
+    d3.select('#histogram')
+      .call(histogram);
   });
+
+  var parseDate = d3.timeParse("%m/%d/%Y %H:%M:%S %p")
+
+  function type(d) {
+    d.date = parseDate(d.date);
+    return d;
+  }
   </script>
 </body>
 </html>

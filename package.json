@@ -2,7 +2,8 @@
   "name": "resusable-chart",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/chart.min.js",
+  "module": "src/main.js",
   "scripts": {
     "prebuild": "rm -rf dist",
     "build": "webpack --config webpack.config.gh.js -p",
@@ -10,8 +11,11 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "webpack": "^2.4.1"
+  },
+  "dependencies": {
+    "d3": "^4.8.0"
   }
 }
