@@ -1,54 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <style>
-  .bar rect {
-    fill: steelblue;
-  }
-  .bar text {
-    fill: #fff;
-    font: 10px sans-serif;
-  }
+    .bar rect {
+      fill: steelblue;
+    }
+
+    .bar text {
+      fill: #fff;
+      font: 10px sans-serif;
+    }
+
+    .enter {
+      fill: green;
+    }
+
+    .update {
+      fill: #333;
+    }
+
+    .exit {
+      fill: brown;
+    }
   </style>
 </head>
+
 <body>
-  <div id="histogram"></div>
+  <div id="hydrograph"></div>
   <br />
   <div id="weatherHistory"></div>
   <br />
   <div id="runningHistory"></div>
+  <br />
+  <div id="histogram"></div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.8.0/d3.min.js"></script>
+  <script src="https://d3js.org/d3-queue.v3.min.js"></script>
   <script src="chart.min.js"></script>
 
   <script>
-  var milesRun = [2, 5, 4, 1, 2, 6, 5];
-	var highTemperatures = [77, 71, 82, 87, 84, 78, 80, 84, 86, 72, 71, 68, 75, 73, 80, 85, 86, 80];
+    var milesRun = [2, 5, 4, 1, 2, 6, 5];
 
-  var runningChart = d3re.bar().data(milesRun).barPadding(2);
-  d3.select('#runningHistory')
-    .call(runningChart);
+    var runningChart = d3re.bar().data(milesRun).barPadding(2);
+    d3.select('#runningHistory')
+      .call(runningChart);
 
-  var weatherChart = d3re.bar().data(highTemperatures).fillColor('coral');
-  d3.select('#weatherHistory')
-    .call(weatherChart);
+    d3.csv('gh-pages-1.csv', type, function(error, data) {
+      if (error) throw error;
+      var histogram = d3re.histogram().data(data);
+      d3.select('#histogram')
+        .call(histogram);
+    });
 
-  d3.csv('gh-pages-1.csv', type, function(error, data){
-    if (error) throw error;
-    var histogram = d3re.histogram().data(data);
-    d3.select('#histogram')
-      .call(histogram);
-  });
+    var q = d3.queue()
+      .defer(d3.json, 'gh-pages-0.json')
+      .defer(d3.json, 'gh-pages-1.json')
+      .awaitAll(function(error, results) {
+        if (error) throw error;
+        var hydrograph = d3re.hydrograph()
+          .data(results[1])
+          .yLower(0)
+          .width(800)
+          .height(400)
+          .colorArray(['#c34d61', '#468954', '#4f61bd']);
 
-  var parseDate = d3.timeParse("%m/%d/%Y %H:%M:%S %p")
+        d3.select('#hydrograph').call(hydrograph);
 
-  function type(d) {
-    d.date = parseDate(d.date);
-    return d;
-  }
+        // d3.interval(function(){
+        //   var index = getRandomIntInclusive(0,1);
+        //   hydrograph.data(results[index]);
+        // }, 5000);
+      });
+
+    var parseDate = d3.timeParse("%m/%d/%Y %H:%M:%S %p")
+
+    function type(d) {
+      d.date = parseDate(d.date);
+      return d;
+    }
+
+    var animate = d3.interval(function(i) {
+      var num = getRandomIntInclusive(1, 10);
+      milesRun.push(num);
+      runningChart.data(milesRun);
+      if (i > 30000) {
+        animate.stop();
+      }
+    }, 2000)
+
+    function getRandomIntInclusive(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
   </script>
 </body>
+
 </html>
