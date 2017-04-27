@@ -5,42 +5,69 @@ export function bar(){
   var barPadding = 1;
   var fillColor = 'steelblue';
 
+  var updateData;
+
   function chart(selection){
     selection.each(function() {
+
       var barSpacing = height / data.length;
       var barHeight = barSpacing - barPadding;
       var maxValue = d3.max(data);
       var widthScale = width / maxValue;
 
-      var t = d3.transition().duration(750);
-
-      var svg = d3.select(this).append('svg')
+      var dom = d3.select(this);
+      var svg = dom.append('svg')
         .attr('height', height)
         .attr('width', width);
 
-      var bar = svg.selectAll('rect')
-        .data(data);
+      var t = d3.transition().duration(750);
 
-      bar.exit()
-        .attr('class', 'exit')
-        .transition(t)
-        .attr('width', function (d) { return d * widthScale})
-        .style('fill-opacity', 1e-6)
-        .remove();
-
-      bar.attr('class', 'update')
-        .attr('width', 0)
-        .style('fill-opacity', 1)
-        .transition(t)
-        .attr('x', 0)
-
-      bar.enter().append('rect')
-        .attr('class', 'enter')
-        .attr('y', function (d, i) { return i * barSpacing })
+      var bars = svg.selectAll('rect')
+        .data(data)
+        .enter()
+        .append('rect')
+        .attr('y', function(d, i) { return i * barSpacing; })
         .attr('height', barHeight)
         .attr('x', 0)
-        .attr('width', function (d) { return d * widthScale})
-        .style('fill', fillColor);
+        .attr('width', function(d) { return d * widthScale; })
+        .style('fill', fillColor)
+
+      updateData = function() {
+        barSpacing = height / data.length;
+        barHeight = barSpacing - barPadding;
+        maxValue = d3.max(data);
+        widthScale = width / maxValue;
+
+        var update = svg.selectAll('rect')
+          .data(data);
+
+        update.transition(t)
+          .attr('y', function (d, i) { return i * barSpacing })
+          .attr('height', barHeight)
+          .attr('x', 0)
+          .attr('width', function(d) { return d * widthScale; });
+
+        update.enter()
+          .append('rect')
+          .attr('y', function (d, i) { return i * barSpacing })
+          .attr('height', barHeight)
+          .attr('x', 0)
+          .style('opacity', 0)
+          .attr('width', 0)
+          .style('fill', fillColor)
+          .transition(t)
+          .delay(function(d, i) { return (data.length - i) * 40; })
+          .attr('width', function (d) { return d * widthScale})
+          .style('opacity', 1);
+
+        update.exit()
+          .transition(t)
+          .style('opacity', 0)
+          .attr('height', 0)
+          .attr('width', 0)
+          .attr('x', 0)
+          .remove();
+      }
 
     });
   }
@@ -48,6 +75,7 @@ export function bar(){
   chart.data = function(_) {
     if (!arguments.length) return data;
     data = _;
+    if (typeof updateData === 'function') updateData();
     return chart;
   }
 
