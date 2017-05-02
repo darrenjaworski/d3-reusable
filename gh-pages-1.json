@@ -1,5 +1,8 @@
 {
   "title": "Shoal -- Low lying areas near Lamar",
+  "watch": [14],
+  "warning": [17.5],
+  "threshold": 10,
   "feeds": [{
     "id": "Observed Stage",
     "values": [{

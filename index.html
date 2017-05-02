@@ -64,9 +64,6 @@
         if (error) throw error;
         var hydrograph = d3re.hydrograph()
           .data(results[1])
-          .yLower(0)
-          .width(800)
-          .height(400)
           .colorArray(['#c34d61', '#468954', '#4f61bd']);
 
         d3.select('#hydrograph').call(hydrograph);
