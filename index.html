@@ -50,7 +50,7 @@
     d3.select('#runningHistory')
       .call(runningChart);
 
-    d3.csv('gh-pages-1.csv', type, function(error, data) {
+    d3.csv('data/gh-pages-1.csv', type, function(error, data) {
       if (error) throw error;
       var histogram = d3re.histogram().data(data);
       d3.select('#histogram')
@@ -58,8 +58,8 @@
     });
 
     var q = d3.queue()
-      .defer(d3.json, 'gh-pages-0.json')
-      .defer(d3.json, 'gh-pages-1.json')
+      .defer(d3.json, 'data/gh-pages-0.json')
+      .defer(d3.json, 'data/gh-pages-1.json')
       .awaitAll(function(error, results) {
         if (error) throw error;
         var hydrograph = d3re.hydrograph()
