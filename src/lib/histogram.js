@@ -1,6 +1,7 @@
 import { ChartDefault } from './defaults';
 
 export function histogram(){
+  var updateData;
   var data = [];
   var margin = ChartDefault.margin;
   var width = ChartDefault.width;
@@ -14,55 +15,78 @@ export function histogram(){
   var y = d3.scaleLinear()
     .range([height, 0]);
 
+  var histogram = d3.histogram()
+    .value(function(d) { return d.date; });
+
   function chart(selection){
     selection.each(function() {
-      x.domain(d3.extent(data, function(d) { return d.date; }));
+      var t = d3.transition().duration(750);
+      var dom = d3.select(this);
 
-      var histogram = d3.histogram()
-        .value(function(d) { return d.date; })
-        .domain(x.domain())
-        .thresholds(x.ticks(d3.timeWeek));
-
-      var bins = histogram(data);
-      y.domain([0, d3.max(bins, function(d) { return d.length; })]);
-
-      var svg = d3.select(this)
-        .append('svg')
+      var svg = dom.append('svg')
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-      svg.append('g')
-        .attr('class', 'axis axis--x')
-        .attr('transform', 'translate(0,'+ height +')')
-        .call(d3.axisBottom(x));
+      updateData = function() {
+        x.domain(d3.extent(data, function(d) { return d.date; }));
 
-      var bar = svg.selectAll(".bar")
-        .data(bins)
-        .enter()
-        .append("g")
-        .attr("class", "bar")
-        .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; });
+        histogram.domain(x.domain())
+          .thresholds(x.ticks(d3.timeWeek));
 
-      bar.append("rect")
-        .attr("x", 1)
-        .attr("width", function(d) { return x(d.x1) - x(d.x0) - 1; })
-        .attr("height", function(d) { return height - y(d.length); });
+        var bins = histogram(data);
 
-      bar.append("text")
-        .attr("dy", ".75em")
-        .attr("y", 6)
-        .attr("x", function(d) { return (x(d.x1) - x(d.x0)) / 2; })
-        .attr("text-anchor", "middle")
-        .text(function(d) { return formatCount(d.length); });
+        y.domain([0, d3.max(bins, function(d) { return d.length; })]);
 
+        svg.append('g')
+          .attr('class', 'axis axis--x')
+          .attr('transform', 'translate(0,'+ height +')')
+          .call(d3.axisBottom(x));
+
+        // join
+        var g = svg.selectAll(".bar")
+          .data(bins);
+
+        // exit
+        g.exit()
+          .transition(t)
+          .style('opacity', 0)
+          .remove();
+
+        // update
+        g.style('opacity', 1)
+          .transition(t)
+          .attr('transform', function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
+
+        // enter
+        var bar = g.enter()
+          .append('g')
+          .attr('class', 'bar')
+          .attr('transform', function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; });
+
+        bar.append('rect')
+          .attr('x', 1)
+          .attr('width', function(d) { return x(d.x1) - x(d.x0) - 1; })
+          .attr('height', function(d) { return height - y(d.length); });
+
+        bar.append('text')
+          .attr("dy", ".75em")
+          .attr("y", 6)
+          .attr("x", function(d) { return (x(d.x1) - x(d.x0)) / 2; })
+          .attr("text-anchor", "middle")
+          .text(function(d) { return formatCount(d.length); });
+
+      }
+
+      updateData();
     });
   }
 
   chart.data = function(_) {
     if (!arguments.length) return data;
     data = _;
+    if (typeof updateData === 'function') updateData();
     return chart;
   }
 

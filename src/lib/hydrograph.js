@@ -2,7 +2,7 @@ import { ChartDefault } from './defaults';
 
 export function hydrograph(){
 
-  var margin = {top: 20, right: 50, bottom: 30, left: 20};
+  var margin = {top: 20, right: 30, bottom: 30, left: 20};
   var width = 1000;
   var height = 500;
   var data = [];
@@ -10,6 +10,8 @@ export function hydrograph(){
   var yLower = undefined;
   var yUpper = undefined;
   var colorArr = d3.schemeCategory10;
+  var showWatch = true;
+  var showWarning = true;
 
   function chart(selection) {
     selection.each(function() {
@@ -23,8 +25,7 @@ export function hydrograph(){
         .domain([
           d3.min(data.feeds, function(f) { return d3.min(f.values, function(d) { return d.x; }) }),
           d3.max(data.feeds, function(f) { return d3.max(f.values, function(d) { return d.x; }) })
-        ])
-        .nice();
+        ]);
 
       var y = d3.scaleLinear()
         .range([height, 0])
@@ -59,6 +60,31 @@ export function hydrograph(){
         .attr('class', 'axis axis--y')
         .call(d3.axisLeft(y));
 
+      var watch = g.selectAll('.watch')
+        .data(data.watch)
+        .enter()
+        .append('rect')
+        .attr('class', 'watch')
+        .attr('y', function(d){ return y(data.warning); })
+        .attr('x', 0)
+        .attr('height', function(d) { return y(d) - y(data.warning); })
+        .attr('width', width)
+        .style('fill', '#FD0')
+        .style('opacity', 0.1);
+
+      var warn = g.selectAll('.warn')
+        .data(data.warning)
+        .enter()
+        .append('rect')
+        .attr('class', 'warn')
+        .attr('y', 0)
+        .attr('x', 0)
+        .attr('height', function(d) {
+          return y(d); })
+        .attr('width', width)
+        .style('fill', 'red')
+        .style('opacity', 0.1);
+
       var feed = g.selectAll('.feed')
         .data(data.feeds)
         .enter()
@@ -72,13 +98,13 @@ export function hydrograph(){
         .attr('d', function(d) { return line(d.values); })
         .style('stroke', function(d) { return color(d.id); });
 
-      feed.append("text")
-          .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
-          .attr("transform", function(d) { return "translate(" + x(d.value.x) + "," + y(d.value.y) + ")"; })
-          .attr("x", 3)
-          .attr("dy", "0.35em")
-          .style("font", "10px sans-serif")
-          .text(function(d) { return d.id; });
+      // feed.append("text")
+      //   .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
+      //   .attr("transform", function(d) { return "translate(" + x(d.value.x) + "," + y(d.value.y) + ")"; })
+      //   .attr("x", 3)
+      //   .attr("dy", "0.35em")
+      //   .style("font", "10px sans-serif")
+      //   .text(function(d) { return d.id; });
 
       updateData = function() {
         var t = d3.transition().duration(750);
@@ -112,6 +138,20 @@ export function hydrograph(){
     });
   }
 
+  chart.showWatch = function(_) {
+    if (!arguments.length) return showWatch;
+    if (typeof _ != 'boolean') return showWatch;
+    showWatch = _;
+    return chart;
+  }
+
+  chart.showWarning = function(_) {
+    if (!arguments.length) return showWarning;
+    if (typeof _ != 'boolean') return showWarning;
+    showWatch = _;
+    return chart;
+  }
+
   chart.data = function(_) {
     if (!arguments.length) return data;
     data = _;
@@ -133,6 +173,7 @@ export function hydrograph(){
 
   chart.yLower = function(_) {
     if (!arguments.length) return yLower;
+    // if ()
     yLower = _;
     return chart;
   }

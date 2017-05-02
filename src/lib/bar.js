@@ -9,66 +9,49 @@ export function bar(){
 
   function chart(selection){
     selection.each(function() {
-
-      var barSpacing = height / data.length;
-      var barHeight = barSpacing - barPadding;
-      var maxValue = d3.max(data);
-      var widthScale = width / maxValue;
-
       var dom = d3.select(this);
       var svg = dom.append('svg')
         .attr('height', height)
         .attr('width', width);
-
-      var t = d3.transition().duration(750);
-
-      var bars = svg.selectAll('rect')
-        .data(data)
-        .enter()
-        .append('rect')
-        .attr('y', function(d, i) { return i * barSpacing; })
-        .attr('height', barHeight)
-        .attr('x', 0)
-        .attr('width', function(d) { return d * widthScale; })
-        .style('fill', fillColor)
+        var t = d3.transition().duration(750);
 
       updateData = function() {
-        barSpacing = height / data.length;
-        barHeight = barSpacing - barPadding;
-        maxValue = d3.max(data);
-        widthScale = width / maxValue;
+        var barSpacing = height / data.length;
+        var barHeight = barSpacing - barPadding;
+        var maxValue = d3.max(data);
+        var widthScale = width / maxValue;
 
-        var update = svg.selectAll('rect')
+        // join
+        var bars = svg.selectAll('rect')
           .data(data);
 
-        update.transition(t)
-          .attr('y', function (d, i) { return i * barSpacing })
-          .attr('height', barHeight)
-          .attr('x', 0)
-          .attr('width', function(d) { return d * widthScale; });
-
-        update.enter()
-          .append('rect')
-          .attr('y', function (d, i) { return i * barSpacing })
-          .attr('height', barHeight)
-          .attr('x', 0)
+        // exit
+        bars.exit()
+          .transition(t)
           .style('opacity', 0)
+          .remove();
+
+        // update
+        bars.style('opacity', 1)
+          .transition(t)
+          .attr('y', function (d, i) { return i * barSpacing; })
+          .attr('height', barHeight);
+
+        // enter
+        bars.enter()
+          .append('rect')
+          .attr('y', function(d, i) { return i * barSpacing; })
+          .attr('height', barHeight)
+          .attr('x', 0)
           .attr('width', 0)
           .style('fill', fillColor)
-          .transition(t)
-          .delay(function(d, i) { return (data.length - i) * 40; })
-          .attr('width', function (d) { return d * widthScale})
-          .style('opacity', 1);
-
-        update.exit()
-          .transition(t)
           .style('opacity', 0)
-          .attr('height', 0)
-          .attr('width', 0)
-          .attr('x', 0)
-          .remove();
+          .transition(t)
+          .style('opacity', 1)
+          .attr('width', function(d) { return d * widthScale; });
       }
 
+      updateData();
     });
   }
 
