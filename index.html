@@ -44,47 +44,31 @@
   <script src="chart.min.js"></script>
 
   <script>
+    d3.json('data/gh-pages-1.json', function(error, d){
+      if (error) throw error;
+      var hydrograph = d3re.hydrograph()
+        .data(d)
+        .colorArray(['#c34d61', '#468954', '#4f61bd']);
+
+      d3.select('#hydrograph').call(hydrograph);
+    });
+
     var milesRun = [2, 5, 4, 1, 2, 6, 5];
 
     var runningChart = d3re.bar().data(milesRun).barPadding(2);
     d3.select('#runningHistory')
       .call(runningChart);
 
-    d3.csv('data/gh-pages-1.csv', type, function(error, data) {
-      if (error) throw error;
-      var histogram = d3re.histogram().data(data);
-      d3.select('#histogram')
-        .call(histogram);
-    });
-
-    var q = d3.queue()
-      .defer(d3.json, 'data/gh-pages-0.json')
-      .defer(d3.json, 'data/gh-pages-1.json')
-      .awaitAll(function(error, results) {
-        if (error) throw error;
-        var hydrograph = d3re.hydrograph()
-          .data(results[1])
-          .colorArray(['#c34d61', '#468954', '#4f61bd']);
-
-        d3.select('#hydrograph').call(hydrograph);
-
-        // d3.interval(function(){
-        //   var index = getRandomIntInclusive(0,1);
-        //   hydrograph.data(results[index]);
-        // }, 5000);
-      });
-
-    var parseDate = d3.timeParse("%m/%d/%Y %H:%M:%S %p")
-
-    function type(d) {
-      d.date = parseDate(d.date);
-      return d;
-    }
+    var histogram = d3re.histogram().data(milesRun);
+    d3.select('#histogram')
+      .call(histogram);
 
     var animate = d3.interval(function(i) {
       var num = getRandomIntInclusive(1, 10);
       milesRun.push(num);
       runningChart.data(milesRun);
+      histogram.data(milesRun);
+
       if (i > 30000) {
         animate.stop();
       }
