@@ -7,16 +7,14 @@ export function histogram(){
   var width = ChartDefault.width;
   var height = ChartDefault.height;
 
-  var formatCount = d3.format(",.0f");
-
-  var x = d3.scaleTime()
-    .rangeRound([0, width]);
+  var x = d3.scaleLinear()
+    .range([0, width]);
 
   var y = d3.scaleLinear()
     .range([height, 0]);
 
   var histogram = d3.histogram()
-    .value(function(d) { return d.date; });
+    .value(function(d) { return d; });
 
   function chart(selection){
     selection.each(function() {
@@ -29,20 +27,19 @@ export function histogram(){
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+      var xAxis = svg.append('g')
+        .attr('class', 'axis axis--x')
+        .attr('transform', 'translate(0,'+ height +')')
+        .call(d3.axisBottom(x));
+
       updateData = function() {
-        x.domain(d3.extent(data, function(d) { return d.date; }));
+        x.domain(d3.extent(data, function(d) { return d; }));
 
-        histogram.domain(x.domain())
-          .thresholds(x.ticks(d3.timeWeek));
-
-        var bins = histogram(data);
+        var bins = histogram.domain(x.domain())
+          .thresholds(x.ticks(10))
+          (data);
 
         y.domain([0, d3.max(bins, function(d) { return d.length; })]);
-
-        svg.append('g')
-          .attr('class', 'axis axis--x')
-          .attr('transform', 'translate(0,'+ height +')')
-          .call(d3.axisBottom(x));
 
         // join
         var g = svg.selectAll(".bar")
@@ -75,7 +72,7 @@ export function histogram(){
           .attr("y", 6)
           .attr("x", function(d) { return (x(d.x1) - x(d.x0)) / 2; })
           .attr("text-anchor", "middle")
-          .text(function(d) { return formatCount(d.length); });
+          .text(function(d) { return d.length; });
 
       }
 
