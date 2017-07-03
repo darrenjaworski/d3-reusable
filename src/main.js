@@ -1,3 +1,3 @@
 export * from './lib/bar';
 export * from './lib/histogram';
-export * from './lib/hydrograph';
+export * from './lib/lineSeries';
