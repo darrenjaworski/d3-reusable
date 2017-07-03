@@ -5,7 +5,7 @@ module.exports = {
   output: {
     library: 'd3re',
     libraryTarget: 'umd',
-    filename: 'chart.min.js',
+    filename: 'd3re.min.js',
     path: resolve(__dirname, '')
   }
 };
