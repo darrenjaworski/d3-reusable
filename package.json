@@ -2,7 +2,7 @@
   "name": "resusable-chart",
   "version": "1.0.0",
   "description": "Reusable d3 chart library.",
-  "main": "dist/chart.min.js",
+  "main": "dist/d3re.min.js",
   "module": "src/main.js",
   "scripts": {
     "prebuild": "rm -rf dist",
