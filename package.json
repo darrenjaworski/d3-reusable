@@ -1,7 +1,7 @@
 {
   "name": "resusable-chart",
   "version": "1.0.0",
-  "description": "",
+  "description": "Reusable d3 chart library.",
   "main": "dist/chart.min.js",
   "module": "src/main.js",
   "scripts": {
@@ -10,12 +10,13 @@
     "dev": "webpack --watch"
   },
   "keywords": [],
-  "author": "",
+  "author": "Darren Jaworski <darren.jaworski@vieuxinc.com>",
   "license": "MIT",
   "devDependencies": {
     "webpack": "^2.6.1"
   },
   "dependencies": {
     "d3": "^4.9.1"
-  }
+  },
+  "repository": "git@github.com:darrenjaworski/d3-reusable.git"
 }
