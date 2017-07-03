@@ -31,7 +31,7 @@
 </head>
 
 <body>
-  <div id="hydrograph"></div>
+  <div id="line"></div>
   <br />
   <div id="weatherHistory"></div>
   <br />
@@ -46,11 +46,11 @@
   <script>
     d3.json('data/gh-pages-1.json', function(error, d){
       if (error) throw error;
-      var hydrograph = d3re.hydrograph()
+      var line = d3re.line()
         .data(d)
         .colorArray(['#c34d61', '#468954', '#4f61bd']);
 
-      d3.select('#hydrograph').call(hydrograph);
+      d3.select('#line').call(line);
     });
 
     var milesRun = [2, 5, 4, 1, 2, 6, 5];
