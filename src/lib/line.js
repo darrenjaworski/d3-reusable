@@ -1,6 +1,6 @@
 import { ChartDefault } from './defaults';
 
-export function lineSeries(){
+export function line(){
 
   var margin = {top: 20, right: 30, bottom: 30, left: 20};
   var width = 1000;
