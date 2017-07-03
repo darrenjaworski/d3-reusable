@@ -10,8 +10,6 @@ export function line(){
   var yLower = undefined;
   var yUpper = undefined;
   var colorArr = d3.schemeCategory10;
-  var showWatch = true;
-  var showWarning = true;
 
   function chart(selection) {
     selection.each(function() {
@@ -59,31 +57,6 @@ export function line(){
       g.append('g')
         .attr('class', 'axis axis--y')
         .call(d3.axisLeft(y));
-
-      var watch = g.selectAll('.watch')
-        .data(data.watch)
-        .enter()
-        .append('rect')
-        .attr('class', 'watch')
-        .attr('y', function(d){ return y(data.warning); })
-        .attr('x', 0)
-        .attr('height', function(d) { return y(d) - y(data.warning); })
-        .attr('width', width)
-        .style('fill', '#FD0')
-        .style('opacity', 0.1);
-
-      var warn = g.selectAll('.warn')
-        .data(data.warning)
-        .enter()
-        .append('rect')
-        .attr('class', 'warn')
-        .attr('y', 0)
-        .attr('x', 0)
-        .attr('height', function(d) {
-          return y(d); })
-        .attr('width', width)
-        .style('fill', 'red')
-        .style('opacity', 0.1);
 
       var feed = g.selectAll('.feed')
         .data(data.feeds)
