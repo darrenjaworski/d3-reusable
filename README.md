@@ -1,8 +1,8 @@
-# D3 Re
+# D3Re
 
 THIS LIBRARY HAS NOT YET BEEN PUBLISHED. THE INFORMATION BELOW IS LIKELY TO BE UPDATED OR CHANGED COMPLETELY. DOCUMENTATION AND PUBLIC API ARE STILL BEING ACTIVELY WRITTEN. THANK YOU FOR YOUR PATIENCE.
 
-A small d3 reusable charts library. Inspired by [Towards Reusable Charts](https://bost.ocks.org/mike/chart/) by Mike Bostock, this is (another) d3 chart library that abstracts away some of the pain of d3 so you can easily define and render a chart on your page.
+A small D3 reusable charts library. Inspired by [Towards Reusable Charts](https://bost.ocks.org/mike/chart/) by Mike Bostock, this is (another) D3 chart library that abstracts away some of the pain of D3 so you can easily define and render a chart on your page.
 
 - bar
 - line
@@ -12,7 +12,7 @@ A small d3 reusable charts library. Inspired by [Towards Reusable Charts](https:
 
 ## Getting started.
 
-This guide will get you up and running on the d3re library basics. Here is a basic example:
+This guide will get you up and running on the D3Re library basics. Here is a basic example:
 
 ```html
 <!DOCTYPE html>
@@ -26,15 +26,20 @@ This guide will get you up and running on the d3re library basics. Here is a bas
 <body>
   <div id="barchart"></div>
 
-  <script src="/path/to/d3re.min.js"></script>
   <script src="/path/to/d3.min.js"></script>
+  <script src="/path/to/d3re.min.js"></script>
   <script>
   (function(){
+    // define chart
+    var runningChart = d3re.bar();
+
     // data
     var milesRun = [2, 5, 4, 1, 2, 6, 5];
 
-    // define chart
-    var runningChart = d3re.bar().data(milesRun).barPadding(2);
+    // add data and options to chart
+    runningChart.data(milesRun)
+      .fillColor('salmon')
+      .barPadding(3);
 
     // select DOM element and call chart.
     d3.select('#barchart').call(runningChart);
@@ -76,30 +81,30 @@ var d3re = require('d3re');
 ### Define chart.
 
 ```javascript
-var barChart = d3re.bar();
+var runningChart = d3re.bar();
 ```
 
 ### Define data and add to chart.
 
 ```javascript
-var barChart = d3re.bar();
+var runningChart = d3re.bar();
 
 var milesRun = [2, 5, 4, 1, 2, 6, 5];
 
-barChart.data(milesRun);
+runningChart.data(milesRun);
 ```
 
 ### Select element and render chart.
 
 ```javascript
 // define chart
-var barChart = d3re.bar();
+var runningChart = d3re.bar();
 
 // define data
 var milesRun = [2, 5, 4, 1, 2, 6, 5];
 
 // update chart with data
-barChart.data(milesRun);
+runningChart.data(milesRun);
 
 // select DOM element and call chart.
 d3.select('#barchart').call(runningChart);
@@ -108,5 +113,11 @@ d3.select('#barchart').call(runningChart);
 ### Use getters and setters to customize chart.
 
 ```javascript
-runningChart.barPadding(2).fillColor('salmon');
+runningChart.barPadding(2)
+  .fillColor('salmon')
+  .barPadding(1)
+  .width(500)
+  .duration(1500)
+  .isVertical(false)
+  .fillColor('salmon');
 ```
