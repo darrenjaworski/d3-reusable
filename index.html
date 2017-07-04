@@ -1,85 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <style>
-    .bar rect {
-      fill: steelblue;
-    }
-
-    .bar text {
-      fill: #fff;
-      font: 10px sans-serif;
-    }
-
-    .enter {
-      fill: green;
-    }
-
-    .update {
-      fill: #333;
-    }
-
-    .exit {
-      fill: brown;
-    }
+  body {
+    font-family: sans-serif;
+    margin: auto;
+    max-width: 50rem;
+  }
   </style>
 </head>
-
 <body>
-  <div id="line"></div>
-  <br />
-  <div id="weatherHistory"></div>
-  <br />
-  <div id="runningHistory"></div>
-  <br />
-  <div id="histogram"></div>
+  <h1>D3 Re - A Reusable Chart Library for D3</h1>
+  <p>A bar chart.</p>
+  <div id="barchart"></div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.8.0/d3.min.js"></script>
-  <script src="https://d3js.org/d3-queue.v3.min.js"></script>
-  <script src="chart.min.js"></script>
-
+  <script src="d3re.min.js"></script>
   <script>
-    d3.json('data/gh-pages-1.json', function(error, d){
-      if (error) throw error;
-      var line = d3re.line()
-        .data(d)
-        .colorArray(['#c34d61', '#468954', '#4f61bd']);
-
-      d3.select('#line').call(line);
+  (function(){
+    // data
+    var milesRun = d3.range(10).map(function(d){
+      return ~~((Math.random() * 30) + 1);
     });
 
-    var milesRun = [2, 5, 4, 1, 2, 6, 5];
+    // define chart
+    var runningChart = d3re.bar()
+      .data(milesRun)
+      .barPadding(1)
+      .width(500)
+      .duration(1500)
+      .isVertical(false)
+      .fillColor('salmon');
 
-    var runningChart = d3re.bar().data(milesRun).barPadding(2);
-    d3.select('#runningHistory')
-      .call(runningChart);
-
-    var histogram = d3re.histogram().data(milesRun);
-    d3.select('#histogram')
-      .call(histogram);
-
-    var animate = d3.interval(function(i) {
-      var num = getRandomIntInclusive(1, 10);
-      milesRun.push(num);
-      runningChart.data(milesRun);
-      histogram.data(milesRun);
-
-      if (i > 30000) {
-        animate.stop();
-      }
-    }, 2000)
-
-    function getRandomIntInclusive(min, max) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
+    // select DOM element and call chart.
+    d3.select('#barchart').call(runningChart);
+  })()
   </script>
 </body>
-
 </html>
