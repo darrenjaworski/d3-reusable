@@ -13,6 +13,7 @@
   "author": "Darren Jaworski <darren.jaworski@vieuxinc.com>",
   "license": "MIT",
   "devDependencies": {
+    "is-css-color": "^1.0.0",
     "webpack": "^2.6.1"
   },
   "dependencies": {
