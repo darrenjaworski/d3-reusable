@@ -1,64 +1,60 @@
 import colorCheck from 'is-css-color';
 
-export function bar(){
-  var data = [];
-  var width = 600;
-  var height = 400;
-  var barPadding = 1;
-  var fillColor = 'steelblue';
-  var durationTime = 750;
-  var accessor = null;
-  var isVertical = false;
+export function bar() {
+  let data = [];
+  let width = 600;
+  let height = 400;
+  let barPadding = 1;
+  let fillColor = 'steelblue';
+  let durationTime = 750;
+  let accessor = null;
+  let isVertical = false;
   // var accessorFunction = function(d) {
   //   return accessor ? d[accessor] : d;
   // };
-  var accessorFunction = function(d) {
+  const accessorFunction = function (d) {
     return d;
   };
 
-  var updateData;
+  let updateData;
 
-  function chart(selection){
-    selection.each(function(d) {
-      var dom = d3.select(this);
-      var svg = dom.append('svg')
-        .attr('height', height)
-        .attr('width', width);
-      var t = d3.transition().duration(durationTime);
+  function chart(selection) {
+    selection.each(function (d) {
+      const dom = d3.select(this);
+      const svg = dom.append('svg').attr('height', height).attr('width', width);
+      const t = d3.transition().duration(durationTime);
 
-      updateData = function() {
-        var config = {
+      updateData = function () {
+        const config = {
           dirAxis: isVertical ? 'x' : 'y',
           dirValue: isVertical ? 'width' : 'height',
           compAxis: isVertical ? 'y' : 'x',
-          compValue: isVertical ? 'height' : 'width'
+          compValue: isVertical ? 'height' : 'width',
         };
 
-        var barSpacing = isVertical ? width / data.length : height / data.length;
-        var barSize = barSpacing - barPadding;
-        var maxValue = d3.max(data, accessorFunction);
-        var barLength = isVertical ? height / maxValue : width / maxValue;
+        const barSpacing = isVertical ? width / data.length : height / data.length;
+        const barSize = barSpacing - barPadding;
+        const maxValue = d3.max(data, accessorFunction);
+        const barLength = isVertical ? height / maxValue : width / maxValue;
 
         // join
-        var bars = svg.selectAll('rect')
-          .data(data);
+        const bars = svg.selectAll('rect').data(data);
 
         // exit
-        bars.exit()
-          .transition(t)
-          .style('opacity', 0)
-          .remove();
+        bars.exit().transition(t).style('opacity', 0).remove();
 
         // update
-        bars.style('opacity', 1)
+        bars
+          .style('opacity', 1)
           .transition(t)
-          .attr(config.dirAxis, function (d, i) { return i * barSpacing; })
+          .attr(config.dirAxis, (d, i) => i * barSpacing)
           .attr(config.dirValue, barSize);
 
         // enter
-        bars.enter()
+        bars
+          .enter()
           .append('rect')
-          .attr(config.dirAxis, function(d, i) { return i * barSpacing; })
+          .attr(config.dirAxis, (d, i) => i * barSpacing)
           .attr(config.dirValue, barSize)
           .attr(config.compAxis, 0)
           .attr(config.compValue, 0)
@@ -66,63 +62,63 @@ export function bar(){
           .style('opacity', 0)
           .transition(t)
           .style('opacity', 1)
-          .attr(config.compValue, function(d) { return d * barLength; });
-      }
+          .attr(config.compValue, d => d * barLength);
+      };
 
       updateData();
     });
   }
 
-  chart.data = function(_) {
+  chart.data = function (_) {
     if (!arguments.length) return data;
     data = _;
     if (typeof updateData === 'function') updateData();
     return chart;
-  }
+  };
 
-  chart.width = function(_) {
+  chart.width = function (_) {
     if (!arguments.length) return width;
     width = _;
     return chart;
   };
 
-  chart.height = function(_) {
+  chart.height = function (_) {
     if (!arguments.length) return height;
     height = _;
     return chart;
   };
 
-  chart.barPadding = function(_) {
+  chart.barPadding = function (_) {
     if (!arguments.length) return barPadding;
     barPadding = _;
     return chart;
-  }
+  };
 
-  chart.accessor = function(_) {
+  chart.accessor = function (_) {
     if (!arguments.length) return accessor;
     accessor = _;
     return chart;
-  }
+  };
 
-  chart.duration =  function(_) {
+  chart.duration = function (_) {
     if (!arguments.length) return durationTime;
     durationTime = _;
     return chart;
-  }
+  };
 
-  chart.fillColor = function(_) {
+  chart.fillColor = function (_) {
     if (!arguments.length) return fillColor;
 
     // must be a valid color
     if (!colorCheck(_)) {
-      console.warn(_ + ' is not a valid color. Try a hex, rgb, hsl or named css color.');
+      console.warn(`${_} is not a valid color. Try a hex, rgb, hsl or named css color.`);
       return chart;
     }
     fillColor = _;
     return chart;
-  }
+  };
 
-  chart.isVertical = function(_) {
+  chart.isVertical = function (_) {
     if (!arguments.length) return isVertical;
 
     // must be a valid boolean value
@@ -132,7 +128,7 @@ export function bar(){
     }
     isVertical = _;
     return chart;
-  }
+  };
 
   return chart;
 }
