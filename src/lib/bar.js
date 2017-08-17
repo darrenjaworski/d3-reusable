@@ -9,15 +9,12 @@ function bar() {
   let durationTime = 750;
   let accessor = null;
   let isVertical = false;
-  // var accessorFunction = function(d) {
-  //   return accessor ? d[accessor] : d;
-  // };
   const accessorFunction = d => d;
 
   let updateData;
 
   function chart(selection) {
-    selection.each(function eachSelection() {
+    selection.each(() => {
       const dom = d3.select(this);
       const svg = dom.append('svg').attr('height', height).attr('width', width);
       const t = d3.transition().duration(durationTime);
