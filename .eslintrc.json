@@ -1,3 +1,6 @@
 {
-    "extends": "airbnb-base"
+  "globals": {
+    "d3": true
+  },
+  "extends": "airbnb-base"
 }
