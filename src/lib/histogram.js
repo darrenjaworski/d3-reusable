@@ -14,7 +14,7 @@ function histogram() {
   const hist = d3.histogram().value(d => d);
 
   function chart(selection) {
-    selection.each(() => {
+    selection.each(function eachSelection() {
       const t = d3.transition().duration(750);
       const dom = d3.select(this);
 
@@ -31,7 +31,7 @@ function histogram() {
         .attr('transform', `translate(0,${height})`)
         .call(d3.axisBottom(x));
 
-      updateData = () => {
+      updateData = function updateDataFn() {
         x.domain(d3.extent(data, d => d));
 
         const bins = hist.domain(x.domain()).thresholds(x.ticks(10))(data);
@@ -76,26 +76,26 @@ function histogram() {
     });
   }
 
-  chart.data = (_) => {
+  chart.data = function dataFn(_) {
     if (!arguments.length) return data;
     data = _;
     if (typeof updateData === 'function') updateData();
     return chart;
   };
 
-  chart.margin = (_) => {
+  chart.margin = function marginFn(_) {
     if (!arguments.length) return margin;
     margin = _;
     return chart;
   };
 
-  chart.width = (_) => {
+  chart.width = function widthFn(_) {
     if (!arguments.length) return width;
     width = _;
     return chart;
   };
 
-  chart.height = (_) => {
+  chart.height = function heightFn(_) {
     if (!arguments.length) return height;
     height = _;
     return chart;

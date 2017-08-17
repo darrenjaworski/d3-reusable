@@ -1,6 +1,6 @@
 // import { ChartDefault } from './defaults';
 
-function line() {
+export default function line() {
   const margin = { top: 20, right: 30, bottom: 30, left: 20 };
   let width = 1000;
   let height = 500;
@@ -11,7 +11,7 @@ function line() {
   let colorArr = d3.schemeCategory10;
 
   function chart(selection) {
-    selection.each(() => {
+    selection.each(function eachSelection() {
       width = width - margin.left - margin.right;
       height = height - margin.top - margin.bottom;
       yLower =
@@ -35,7 +35,7 @@ function line() {
 
       const color = d3.scaleOrdinal(colorArr).domain(data.feeds.map(f => f.id));
 
-      const lineGen = d3.line().curve(d3.curveBasis).x(d => x(d.x)).y(d => y(d.y));
+      const lineCurve = d3.line().curve(d3.curveBasis).x(d => x(d.x)).y(d => y(d.y));
 
       const dom = d3.select(this);
       const svg = dom
@@ -60,7 +60,7 @@ function line() {
         .attr('class', 'line')
         .style('fill', 'none')
         .style('stroke-width', '2px')
-        .attr('d', d => lineGen(d.values))
+        .attr('d', d => lineCurve(d.values))
         .style('stroke', d => color(d.id));
 
       // feed.append("text")
@@ -71,12 +71,12 @@ function line() {
       //   .style("font", "10px sans-serif")
       //   .text(function(d) { return d.id; });
 
-      // updateData = () => {
+      // updateData = function () {
       //   const t = d3.transition().duration(750);
       //
       //   const updateFeed = g.selectAll('.feed').data(data.feeds);
       //
-      //   const lineDOM = updateFeed.selectAll('.line');
+      //   const line = updateFeed.selectAll('.line');
       //
       //   // updateFeed.enter()
       //   //   .append('g')
@@ -89,7 +89,7 @@ function line() {
       //   //   .style('opacity', 0)
       //   //   .transition(t)
       //   //   .delay(function(d, i) { return (data.length - i) * 40; })
-      //   //   .attr('d', function(d) { return line(d.values); })
+      //   //   .attr('d', function(d) { return lineCurve(d.values); })
       //   //   .style('stroke', function(d) { return color(d.id); })
       //   //   .style('opacity', 1);
       //   //
@@ -101,39 +101,39 @@ function line() {
     });
   }
 
-  chart.data = (_) => {
+  chart.data = function dataFn(_) {
     if (!arguments.length) return data;
     data = _;
     if (typeof updateData === 'function') updateData();
     return chart;
   };
 
-  chart.width = (_) => {
+  chart.width = function widthFn(_) {
     if (!arguments.length) return width;
     width = _;
     return chart;
   };
 
-  chart.height = (_) => {
+  chart.height = function heightFn(_) {
     if (!arguments.length) return height;
     height = _;
     return chart;
   };
 
-  chart.yLower = (_) => {
+  chart.yLower = function yLowerFn(_) {
     if (!arguments.length) return yLower;
     // if ()
     yLower = _;
     return chart;
   };
 
-  chart.yUpper = (_) => {
+  chart.yUpper = function yUpperFn(_) {
     if (!arguments.length) return yUpper;
     yUpper = _;
     return chart;
   };
 
-  chart.colorArray = (_) => {
+  chart.colorArray = function colorArrayFn(_) {
     if (!arguments.length) return colorArr;
     colorArr = _;
     return chart;
@@ -141,5 +141,3 @@ function line() {
 
   return chart;
 }
-
-export default line;
