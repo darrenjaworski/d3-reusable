@@ -1,4 +1,4 @@
-const ChartDefault = {
+const ChartDefaults = {
   margin: {
     top: 10,
     right: 30,
@@ -9,4 +9,4 @@ const ChartDefault = {
   height: 500 - 10 - 30,
 };
 
-export default ChartDefault;
+export default ChartDefaults;

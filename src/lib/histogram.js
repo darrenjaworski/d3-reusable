@@ -1,11 +1,11 @@
-import { ChartDefault } from './defaults';
+import { ChartDefaults } from './defaults';
 
 function histogram() {
   let updateData;
   let data = [];
-  let margin = ChartDefault.margin;
-  let width = ChartDefault.width;
-  let height = ChartDefault.height;
+  let margin = ChartDefaults.margin;
+  let width = ChartDefaults.width;
+  let height = ChartDefaults.height;
 
   const x = d3.scaleLinear().range([0, width]);
 

@@ -1,6 +1,6 @@
 import colorCheck from 'is-css-color';
 
-function bar() {
+export default function bar() {
   let data = [];
   let width = 600;
   let height = 400;
@@ -14,7 +14,7 @@ function bar() {
   let updateData;
 
   function chart(selection) {
-    selection.each(() => {
+    selection.each(function eachSelection() {
       const dom = d3.select(this);
       const svg = dom.append('svg').attr('height', height).attr('width', width);
       const t = d3.transition().duration(durationTime);
@@ -64,44 +64,44 @@ function bar() {
     });
   }
 
-  chart.data = (_) => {
+  chart.data = function dataFn(_) {
     if (!arguments.length) return data;
     data = _;
     if (typeof updateData === 'function') updateData();
     return chart;
   };
 
-  chart.width = (_) => {
+  chart.width = function widthFn(_) {
     if (!arguments.length) return width;
     width = _;
     return chart;
   };
 
-  chart.height = (_) => {
+  chart.height = function heightFn(_) {
     if (!arguments.length) return height;
     height = _;
     return chart;
   };
 
-  chart.barPadding = (_) => {
+  chart.barPadding = function barPaddingFn(_) {
     if (!arguments.length) return barPadding;
     barPadding = _;
     return chart;
   };
 
-  chart.accessor = (_) => {
+  chart.accessor = function accessorFn(_) {
     if (!arguments.length) return accessor;
     accessor = _;
     return chart;
   };
 
-  chart.duration = (_) => {
+  chart.duration = function durationFn(_) {
     if (!arguments.length) return durationTime;
     durationTime = _;
     return chart;
   };
 
-  chart.fillColor = (_) => {
+  chart.fillColor = function fillColorFn(_) {
     if (!arguments.length) return fillColor;
 
     // must be a valid color
@@ -113,7 +113,7 @@ function bar() {
     return chart;
   };
 
-  chart.isVertical = (_) => {
+  chart.isVertical = function isVerticalFn(_) {
     if (!arguments.length) return isVertical;
 
     // must be a valid boolean value
@@ -127,5 +127,3 @@ function bar() {
 
   return chart;
 }
-
-export default bar;
