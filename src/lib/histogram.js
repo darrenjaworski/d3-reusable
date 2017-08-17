@@ -1,6 +1,6 @@
 import { ChartDefault } from './defaults';
 
-export function histogram() {
+function histogram() {
   let updateData;
   let data = [];
   let margin = ChartDefault.margin;
@@ -11,7 +11,7 @@ export function histogram() {
 
   const y = d3.scaleLinear().range([height, 0]);
 
-  const histogram = d3.histogram().value(d => d);
+  const hist = d3.histogram().value(d => d);
 
   function chart(selection) {
     selection.each(function () {
@@ -32,16 +32,11 @@ export function histogram() {
         .call(d3.axisBottom(x));
 
       updateData = function () {
-        x.domain(
-          d3.extent(data, d => d),
-        );
+        x.domain(d3.extent(data, d => d));
 
-        const bins = histogram.domain(x.domain()).thresholds(x.ticks(10))(data);
+        const bins = hist.domain(x.domain()).thresholds(x.ticks(10))(data);
 
-        y.domain([
-          0,
-          d3.max(bins, d => d.length),
-        ]);
+        y.domain([0, d3.max(bins, d => d.length)]);
 
         // join
         const g = svg.selectAll('.bar').data(bins);
@@ -50,10 +45,17 @@ export function histogram() {
         g.exit().transition(t).style('opacity', 0).remove();
 
         // update
-        g.style('opacity', 1).transition(t).attr('transform', d => `translate(${x(d.x0)},${y(d.length)})`);
+        g
+          .style('opacity', 1)
+          .transition(t)
+          .attr('transform', d => `translate(${x(d.x0)},${y(d.length)})`);
 
         // enter
-        const bar = g.enter().append('g').attr('class', 'bar').attr('transform', d => `translate(${x(d.x0)},${y(d.length)})`);
+        const bar = g
+          .enter()
+          .append('g')
+          .attr('class', 'bar')
+          .attr('transform', d => `translate(${x(d.x0)},${y(d.length)})`);
 
         bar
           .append('rect')
@@ -101,3 +103,5 @@ export function histogram() {
 
   return chart;
 }
+
+export default histogram;

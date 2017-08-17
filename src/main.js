@@ -1,3 +1,3 @@
-export * from './lib/bar';
-export * from './lib/histogram';
-export * from './lib/line';
+export { bar } from './lib/bar';
+export { histogram } from './lib/histogram';
+export { line } from './lib/line';

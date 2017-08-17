@@ -1,6 +1,6 @@
-import { ChartDefault } from './defaults';
+// import { ChartDefault } from './defaults';
 
-export function line() {
+function line() {
   const margin = { top: 20, right: 30, bottom: 30, left: 20 };
   let width = 1000;
   let height = 500;
@@ -23,22 +23,19 @@ export function line() {
           ? yUpper
           : d3.max(data.feeds, f => d3.max(f.values, d => d.y));
 
-      const x = d3.scaleTime().range([0, width]).domain([
-        d3.min(data.feeds, f => d3.min(f.values, d => d.x)),
-        d3.max(data.feeds, f => d3.max(f.values, d => d.x)),
-      ]);
+      const x = d3
+        .scaleTime()
+        .range([0, width])
+        .domain([
+          d3.min(data.feeds, f => d3.min(f.values, d => d.x)),
+          d3.max(data.feeds, f => d3.max(f.values, d => d.x)),
+        ]);
 
       const y = d3.scaleLinear().range([height, 0]).domain([yLower, yUpper]).nice();
 
-      const color = d3.scaleOrdinal(colorArr).domain(
-        data.feeds.map(f => f.id),
-      );
+      const color = d3.scaleOrdinal(colorArr).domain(data.feeds.map(f => f.id));
 
-      const line = d3
-        .line()
-        .curve(d3.curveBasis)
-        .x(d => x(d.x))
-        .y(d => y(d.y));
+      const line = d3.line().curve(d3.curveBasis).x(d => x(d.x)).y(d => y(d.y));
 
       const dom = d3.select(this);
       const svg = dom
@@ -46,9 +43,7 @@ export function line() {
         .attr('height', height + margin.top + margin.bottom)
         .attr('width', width + margin.left + margin.right);
 
-      const g = svg
-        .append('g')
-        .attr('transform', `translate(${margin.left},${margin.top})`);
+      const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
       g
         .append('g')
@@ -160,3 +155,5 @@ export function line() {
 
   return chart;
 }
+
+export default line;
