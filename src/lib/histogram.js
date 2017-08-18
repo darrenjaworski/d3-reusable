@@ -1,4 +1,4 @@
-import { ChartDefaults } from './defaults';
+import ChartDefaults from './defaults';
 
 function histogram() {
   let updateData;
