@@ -122,7 +122,6 @@ export default function line() {
 
   chart.yLower = function yLowerFn(_) {
     if (!arguments.length) return yLower;
-    // if ()
     yLower = _;
     return chart;
   };
