@@ -10,13 +10,14 @@
     "dev": "webpack --watch"
   },
   "keywords": [],
-  "author": "Darren Jaworski <darren.jaworski@vieuxinc.com>",
+  "author": "Darren Jaworski <darrenjaworski@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "eslint": "^4.4.1",
     "eslint-config-airbnb-base": "^11.3.1",
     "eslint-plugin-import": "^2.7.0",
-    "webpack": "^2.6.1"
+    "webpack": "^2.6.1",
+    "webpack-jarvis": "^0.1.1"
   },
   "dependencies": {
     "is-css-color": "^1.0.0",

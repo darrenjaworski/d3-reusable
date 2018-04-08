@@ -15,11 +15,11 @@ export default function line() {
       width = width - margin.left - margin.right;
       height = height - margin.top - margin.bottom;
       yLower =
-        typeof yLower !== 'undefined'
+        typeof yLower !== "undefined"
           ? yLower
           : d3.min(data.feeds, f => d3.min(f.values, d => d.y));
       yUpper =
-        typeof yUpper !== 'undefined'
+        typeof yUpper !== "undefined"
           ? yUpper
           : d3.max(data.feeds, f => d3.max(f.values, d => d.y));
 
@@ -28,40 +28,58 @@ export default function line() {
         .range([0, width])
         .domain([
           d3.min(data.feeds, f => d3.min(f.values, d => d.x)),
-          d3.max(data.feeds, f => d3.max(f.values, d => d.x)),
+          d3.max(data.feeds, f => d3.max(f.values, d => d.x))
         ]);
 
-      const y = d3.scaleLinear().range([height, 0]).domain([yLower, yUpper]).nice();
+      const y = d3
+        .scaleLinear()
+        .range([height, 0])
+        .domain([yLower, yUpper])
+        .nice();
 
       const color = d3.scaleOrdinal(colorArr).domain(data.feeds.map(f => f.id));
 
-      const lineCurve = d3.line().curve(d3.curveBasis).x(d => x(d.x)).y(d => y(d.y));
+      const lineCurve = d3
+        .line()
+        .curve(d3.curveBasis)
+        .x(d => x(d.x))
+        .y(d => y(d.y));
 
       const dom = d3.select(this);
       const svg = dom
-        .append('svg')
-        .attr('height', height + margin.top + margin.bottom)
-        .attr('width', width + margin.left + margin.right);
+        .append("svg")
+        .attr("height", height + margin.top + margin.bottom)
+        .attr("width", width + margin.left + margin.right);
 
-      const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+      const g = svg
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
 
       g
-        .append('g')
-        .attr('class', 'axis axis--x')
-        .attr('transform', `translate(0,${height})`)
+        .append("g")
+        .attr("class", "axis axis--x")
+        .attr("transform", `translate(0,${height})`)
         .call(d3.axisBottom(x));
 
-      g.append('g').attr('class', 'axis axis--y').call(d3.axisLeft(y));
+      g
+        .append("g")
+        .attr("class", "axis axis--y")
+        .call(d3.axisLeft(y));
 
-      const feed = g.selectAll('.feed').data(data.feeds).enter().append('g').attr('class', 'feed');
+      const feed = g
+        .selectAll(".feed")
+        .data(data.feeds)
+        .enter()
+        .append("g")
+        .attr("class", "feed");
 
       feed
-        .append('path')
-        .attr('class', 'line')
-        .style('fill', 'none')
-        .style('stroke-width', '2px')
-        .attr('d', d => lineCurve(d.values))
-        .style('stroke', d => color(d.id));
+        .append("path")
+        .attr("class", "line")
+        .style("fill", "none")
+        .style("stroke-width", "2px")
+        .attr("d", d => lineCurve(d.values))
+        .style("stroke", d => color(d.id));
 
       // feed.append("text")
       //   .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
@@ -104,7 +122,7 @@ export default function line() {
   chart.data = function dataFn(_) {
     if (!arguments.length) return data;
     data = _;
-    if (typeof updateData === 'function') updateData();
+    if (typeof updateData === "function") updateData();
     return chart;
   };
 

@@ -1,4 +1,4 @@
-import ChartDefaults from './defaults';
+import ChartDefaults from "./defaults";
 
 function histogram() {
   let updateData;
@@ -19,16 +19,16 @@ function histogram() {
       const dom = d3.select(this);
 
       const svg = dom
-        .append('svg')
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom)
-        .append('g')
-        .attr('transform', `translate(${margin.left},${margin.top})`);
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", `translate(${margin.left},${margin.top})`);
 
       svg
-        .append('g')
-        .attr('class', 'axis axis--x')
-        .attr('transform', `translate(0,${height})`)
+        .append("g")
+        .attr("class", "axis axis--x")
+        .attr("transform", `translate(0,${height})`)
         .call(d3.axisBottom(x));
 
       updateData = function updateDataFn() {
@@ -39,36 +39,40 @@ function histogram() {
         y.domain([0, d3.max(bins, d => d.length)]);
 
         // join
-        const g = svg.selectAll('.bar').data(bins);
+        const g = svg.selectAll(".bar").data(bins);
 
         // exit
-        g.exit().transition(t).style('opacity', 0).remove();
+        g
+          .exit()
+          .transition(t)
+          .style("opacity", 0)
+          .remove();
 
         // update
         g
-          .style('opacity', 1)
+          .style("opacity", 1)
           .transition(t)
-          .attr('transform', d => `translate(${x(d.x0)},${y(d.length)})`);
+          .attr("transform", d => `translate(${x(d.x0)},${y(d.length)})`);
 
         // enter
         const bar = g
           .enter()
-          .append('g')
-          .attr('class', 'bar')
-          .attr('transform', d => `translate(${x(d.x0)},${y(d.length)})`);
+          .append("g")
+          .attr("class", "bar")
+          .attr("transform", d => `translate(${x(d.x0)},${y(d.length)})`);
 
         bar
-          .append('rect')
-          .attr('x', 1)
-          .attr('width', d => x(d.x1) - x(d.x0) - 1)
-          .attr('height', d => height - y(d.length));
+          .append("rect")
+          .attr("x", 1)
+          .attr("width", d => x(d.x1) - x(d.x0) - 1)
+          .attr("height", d => height - y(d.length));
 
         bar
-          .append('text')
-          .attr('dy', '.75em')
-          .attr('y', 6)
-          .attr('x', d => (x(d.x1) - x(d.x0)) / 2)
-          .attr('text-anchor', 'middle')
+          .append("text")
+          .attr("dy", ".75em")
+          .attr("y", 6)
+          .attr("x", d => (x(d.x1) - x(d.x0)) / 2)
+          .attr("text-anchor", "middle")
           .text(d => d.length);
       };
 
@@ -79,7 +83,7 @@ function histogram() {
   chart.data = function dataFn(_) {
     if (!arguments.length) return data;
     data = _;
-    if (typeof updateData === 'function') updateData();
+    if (typeof updateData === "function") updateData();
     return chart;
   };
 
